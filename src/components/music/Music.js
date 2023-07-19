@@ -1,5 +1,4 @@
-import React from "react";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { collection, onSnapshot, query, orderBy } from "firebase/firestore";
 import { db, auth } from "../../firebase";
 import { onAuthStateChanged } from "firebase/auth";
@@ -41,54 +40,53 @@ const Music = () => {
             setSongs(songList);
         });
         return () => unsubscribe();
-    }, [authUser, collectionRef]); 
+    }, [authUser]);
 
     const [toggleState, setToggleState] = useState("0");
 
-    const toggleTab = (index) => {
-        setToggleState(index);
+    const toggleTab = (id) => {
+        setToggleState(id);
     };
 
-    return authUser ? (
-        <section className="album__container container grid">
-            {songs.map((song, index) => (
-                <div className="song__cards" key={song.id}>
-                    <MusicCard toggleTab={toggleTab} {...song} />
-                    <div
-                        className={
-                            toggleState === song.id
-                                ? "create__modal active-modal"
-                                : "create__modal"
-                        }
-                    >
-                        <ChangeModal
-                            authUser={authUser}
-                            toggleTab={toggleTab}
-                            index={String(index)}
-                            docId={song.id}
-                            {...song}
-                        />
+    return (
+        authUser && (
+            <section className="album__container container grid">
+                {songs.map((song) => (
+                    <div className="song__cards" key={song.id}>
+                        <MusicCard toggleTab={toggleTab} {...song} />
+                        <div
+                            className={
+                                toggleState === song.id
+                                    ? "create__modal active-modal"
+                                    : "create__modal"
+                            }
+                        >
+                            <ChangeModal
+                                authUser={authUser}
+                                toggleTab={toggleTab}
+                                docId={song.id}
+                                {...song}
+                            />
+                        </div>
+                    </div>
+                ))}
+                <div className="album__card">
+                    <div className="create" onClick={() => toggleTab("create")}>
+                        <div className="add__button">+</div>
+                        <p className="add__text">Upload Album</p>
                     </div>
                 </div>
-            ))}
-            <div className="album__card">
-                <div className="create" onClick={() => toggleTab("create")}>
-                    <div className="add__button">+</div>
-                    <p className="add__text">Upload Album</p>
+                <div
+                    className={
+                        toggleState === "create"
+                            ? "create__modal active-modal"
+                            : "create__modal"
+                    }
+                >
+                    <UploadModal authUser={authUser} toggleTab={toggleTab} />
                 </div>
-            </div>
-            <div
-                className={
-                    toggleState === "create"
-                        ? "create__modal active-modal"
-                        : "create__modal"
-                }
-            >
-                <UploadModal authUser={authUser} toggleTab={toggleTab} />
-            </div>
-        </section>
-    ) : (
-        <></>
+            </section>
+        )
     );
 };
 
