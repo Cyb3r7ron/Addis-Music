@@ -41,7 +41,7 @@ const Music = () => {
             setSongs(songList);
         });
         return () => unsubscribe();
-    }, [authUser]);
+    }, [authUser, collectionRef]); 
 
     const [toggleState, setToggleState] = useState("0");
 

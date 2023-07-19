@@ -78,8 +78,6 @@ const SignIn = () => {
             );
             cookies.set('authToken', userCredential.user.refreshToken);
         } catch (error) {
-            const errorCode = error.code;
-            const errorMessage = error.message;
         }
         setSignUpEmail('');
         setSignUpPassword('');
@@ -90,8 +88,6 @@ const SignIn = () => {
             const userCredential = await signInWithPopup(auth, provider);
             cookies.set('authToken', userCredential.user.refreshToken);
         } catch (error) {
-            const errorCode = error.code;
-            const errorMessage = error.message;
         }
     };
 
