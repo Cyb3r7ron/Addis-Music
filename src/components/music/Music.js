@@ -25,7 +25,7 @@ const Music = () => {
     }, []);
 
     const [songs, setSongs] = useState([]);
-
+// eslint-disable-next-line
     let collectionRef = null;
     if (authUser) collectionRef = collection(db, `${auth.currentUser.uid}`);
 
